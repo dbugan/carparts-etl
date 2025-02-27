@@ -1,0 +1,87 @@
+Project Overview
+
+This project is designed to manage and catalog automotive parts, specifically focusing on BMW OEM (Original Equipment Manufacturer) parts and upgrades. 
+The database schema supports tracking of various parts, their categories, brands, pricing, compatibility, and vendor details. 
+It also includes an audit trail to record changes made to the database for traceability and transparency.
+
+The project utilizes an ETL (Extract, Transform, Load) pipeline to manage and transform data from multiple sources, ensuring a comprehensive catalog that can be used for various purposes.
+
+This is a source that I can access and search like an end-user for parts for my personal BMW E34 car.
+
+The goal is to streamline the management of parts and pricing data, providing an efficient and scalable solution for part identification, upgrades, and replacements.
+
+Database Schema for Parts Catalog ETL Project
+This schema defines the structure of the parts catalog database used for the ETL project. The database contains tables for storing brands, categories, parts, prices, vendors, compatibility details, and change history.
+
+Data sources:
+www.realoem.com - BMW OEM parts catalog
+www.ecstuning.com - BMW aftermarket parts and upgrades
+www.bmwpartsdirect.com - BMW OEM parts and accessories
+www.bimmerworld.com - BMW performance parts and accessories
+www.fcpeuro.com - European car parts and accessories
+
+Tables
+brands
+Stores information about the brands of parts.
+
+brand_id: UUID (Primary Key)
+brand_name: VARCHAR (Unique)
+categories
+Stores information about part categories.
+
+category_id: UUID (Primary Key)
+category_name: VARCHAR (Unique)
+change_history
+Tracks changes to the database schema, tables, and data.
+
+log_id: UUID (Primary Key)
+schema_name: TEXT
+table_name: TEXT
+operation: TEXT (Insert/Update/Delete)
+changed_by: TEXT
+change_time: TIMESTAMP
+old_data: JSONB
+new_data: JSONB
+compatibility
+Stores information about part compatibility (model, engine code, and years).
+
+compatibility_id: UUID (Primary Key)
+model: VARCHAR
+engine_code: VARCHAR
+years: VARCHAR
+parts
+Stores detailed information about parts.
+
+part_id: UUID (Primary Key)
+part_number: VARCHAR (Unique)
+name: VARCHAR
+description: TEXT
+category_id: UUID (Foreign Key referencing categories)
+brand_id: UUID (Foreign Key referencing brands)
+compatibility_id: UUID (Foreign Key referencing compatibility)
+prices
+Stores price details for parts.
+
+price_id: UUID (Primary Key)
+part_id: UUID (Foreign Key referencing parts)
+vendor_id: UUID (Foreign Key referencing vendors)
+price_zar: NUMERIC
+price_date: TIMESTAMP
+vendors
+Stores vendor information.
+
+vendor_id: UUID (Primary Key)
+vendor_name: VARCHAR
+website: TEXT
+Relationships
+parts.category_id references categories.category_id
+parts.brand_id references brands.brand_id
+parts.compatibility_id references compatibility.compatibility_id
+prices.part_id references parts.part_id
+prices.vendor_id references vendors.vendor_id
+Version History
+v1.0.0 - Initial setup
+v1.0.1 - Added change_history table
+v1.0.2 - Added compatibility table
+v1.0.3 - Added prices table
+v1.0.4 - Added vendors table
